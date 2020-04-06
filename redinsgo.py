@@ -50,7 +50,7 @@ def limpar_database():
 def carregar_numeros_bingo():
     global conexao_redis
 
-    print(f'O jogo usará pedras numeradas de {BINGO_NUMEROS_INTERVALO[0]} a {BINGO_NUMEROS_INTERVALO[1] - 1}.')
+    print(f'>> O jogo usará pedras numeradas de {BINGO_NUMEROS_INTERVALO[0]} a {BINGO_NUMEROS_INTERVALO[1] - 1}.')
 
     conexao_redis.sadd(CHAVE_BINGO_NUMEROS, *range(*BINGO_NUMEROS_INTERVALO))
 
@@ -58,14 +58,14 @@ def carregar_numeros_bingo():
 def carregar_jogadores_bingo():
     global conexao_redis
 
-    print('Carregar perfis dos jogadores:')
+    print('>> Carregar perfis dos jogadores:')
     print()
 
     for numero in intervalo_numeros_jogadores():
         chave_jogador = montar_chave_jogador(numero)
         nome_jogador = gerar_nome_jogador()
 
-        print(f'{chave_jogador}: {CHAVE_JOGADOR_NOME}={nome_jogador}')
+        print(f'>> - {chave_jogador}: {CHAVE_JOGADOR_NOME}={nome_jogador}')
 
         conexao_redis.hset(chave_jogador, CHAVE_JOGADOR_NOME, nome_jogador)
 
@@ -75,7 +75,7 @@ def carregar_jogadores_bingo():
 def carregar_cartelas_bingo():
     global conexao_redis
 
-    print('Carregar as cartelas dos jogadores:')
+    print('>> Carregar as cartelas dos jogadores:')
     print()
 
     for jogador in intervalo_numeros_jogadores():
@@ -87,7 +87,7 @@ def carregar_cartelas_bingo():
 
         numeros_cartela = {int(numero) for numero in conexao_redis.smembers(chave_cartela)}
 
-        print(f'{chave_jogador} --> {chave_cartela}: {sorted(numeros_cartela)}')
+        print(f'>> - {chave_jogador} --> {chave_cartela}: {sorted(numeros_cartela)}')
 
         conexao_redis.hset(chave_jogador, CHAVE_JOGADOR_CARTELA, chave_cartela)
 
@@ -100,7 +100,7 @@ def sortear_e_pontuar_pedra():
     while conexao_redis.sismember(CHAVE_BINGO_PEDRAS, pedra):
         pedra = int(conexao_redis.srandmember(CHAVE_BINGO_NUMEROS))
 
-    print(f'Sorteada a pedra "{pedra}"')
+    print(f'>> # Sorteada a pedra "{pedra}" #')
 
     conexao_redis.sadd(CHAVE_BINGO_PEDRAS, pedra)
 
@@ -113,22 +113,37 @@ def sortear_e_pontuar_pedra():
         if conexao_redis.sismember(chave_cartela, pedra):
             nome_jogador = conexao_redis.hget(chave_jogador, CHAVE_JOGADOR_NOME).decode('utf-8')
 
-            print(f' - O jogador {nome_jogador} ({chave_jogador}) pontuou.')
+            print(f'>> - O jogador {nome_jogador} ({chave_jogador}) pontuou.')
 
             conexao_redis.zincrby(CHAVE_BINGO_SCORE, 1.0, chave_jogador)
 
+    print()
+
 
 def existe_vencedor():
-    jogador_maior_pontuacao = conexao_redis.zrevrange(CHAVE_BINGO_SCORE, 0, 0)[0]
-    pontuacao_jogador = conexao_redis.zscore(CHAVE_BINGO_SCORE, jogador_maior_pontuacao)
+    global conexao_redis
+
+    chave_jogador_maior_pontuacao = conexao_redis.zrevrange(CHAVE_BINGO_SCORE, 0, 0)[0]
+    pontuacao_jogador = conexao_redis.zscore(CHAVE_BINGO_SCORE, chave_jogador_maior_pontuacao)
 
     return pontuacao_jogador >= BINGO_CARTELA_NUMEROS_QUANTIDADE
+
+
+def apresentar_vencedor():
+    global conexao_redis
+
+    chave_jogador_vencedor = conexao_redis.zrevrange(CHAVE_BINGO_SCORE, 0, 0)[0].decode('utf-8')
+    nome_vencedor = conexao_redis.hget(chave_jogador_vencedor, CHAVE_JOGADOR_NOME).decode('utf-8')
+
+    print('>> ### REDINSGO! ###')
+    print(f'>> ### O JOGADOR {nome_vencedor} ({chave_jogador_vencedor}) COMPLETOU A CARTELA! ###')
+    print()
 
 
 def jogar_bingo():
     global conexao_redis
 
-    print('Jogando uma partida...')
+    print('>> # Jogando uma partida #')
     print()
 
     sortear_e_pontuar_pedra()
@@ -136,11 +151,13 @@ def jogar_bingo():
     while not existe_vencedor():
         sortear_e_pontuar_pedra()
 
+    apresentar_vencedor()
+
 
 def main():
     global conexao_redis
 
-    print('REDINSGO: Bingo com Redis')
+    print('### REDINSGO: Bingo com Redis ###')
     print()
 
     with redis.Redis(REDIS_CONEXAO_HOST, REDIS_CONEXAO_PORT) as conexao_redis:
