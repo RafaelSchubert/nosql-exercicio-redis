@@ -1,0 +1,846 @@
+### REDINSGO: Bingo com Redis ###
+
+>> O jogo usará pedras numeradas de 1 a 99.
+>> Carregar perfis dos jogadores:
+
+>> - usuario:1: nome=Eduardo Carvalho
+>> - usuario:2: nome=João Silveira
+>> - usuario:3: nome=Bernardo Silva
+>> - usuario:4: nome=Gilberto Silveira
+>> - usuario:5: nome=Bernardo Silva
+>> - usuario:6: nome=Eduardo Nobre
+>> - usuario:7: nome=André Carvalho
+>> - usuario:8: nome=João Silveira
+>> - usuario:9: nome=Pedro Torres
+>> - usuario:10: nome=Lucas Silva
+>> - usuario:11: nome=André Nobre
+>> - usuario:12: nome=Bernardo Felipe
+>> - usuario:13: nome=Lucas Pereira
+>> - usuario:14: nome=Lucas Silva
+>> - usuario:15: nome=Gilberto Carvalho
+>> - usuario:16: nome=Paulo Brasil
+>> - usuario:17: nome=Paulo Pereira
+>> - usuario:18: nome=Bernardo Brasil
+>> - usuario:19: nome=Bernardo Nobre
+>> - usuario:20: nome=Gilberto Felipe
+>> - usuario:21: nome=Gilberto Pereira
+>> - usuario:22: nome=Eduardo Nobre
+>> - usuario:23: nome=Paulo Silveira
+>> - usuario:24: nome=Paulo Torres
+>> - usuario:25: nome=Paulo Pereira
+>> - usuario:26: nome=João Brasil
+>> - usuario:27: nome=Paulo Torres
+>> - usuario:28: nome=Bernardo Carvalho
+>> - usuario:29: nome=Paulo Brasil
+>> - usuario:30: nome=Bernardo Carvalho
+>> - usuario:31: nome=André Nobre
+>> - usuario:32: nome=André Silveira
+>> - usuario:33: nome=Gilberto Felipe
+>> - usuario:34: nome=Lucas Felipe
+>> - usuario:35: nome=Pedro Brasil
+>> - usuario:36: nome=Lucas Torres
+>> - usuario:37: nome=Eduardo Felipe
+>> - usuario:38: nome=Afonso Carvalho
+>> - usuario:39: nome=Eduardo Torres
+>> - usuario:40: nome=Lucas Felipe
+>> - usuario:41: nome=Afonso Nobre
+>> - usuario:42: nome=Pedro Nobre
+>> - usuario:43: nome=Eduardo Brasil
+>> - usuario:44: nome=André Pereira
+>> - usuario:45: nome=André Brasil
+>> - usuario:46: nome=Paulo Silva
+>> - usuario:47: nome=Eduardo Carvalho
+>> - usuario:48: nome=Paulo Carvalho
+>> - usuario:49: nome=Gilberto Silveira
+>> - usuario:50: nome=André Felipe
+
+>> Carregar as cartelas dos jogadores:
+
+>> - usuario:1 --> cartela:1: [5, 8, 10, 16, 25, 28, 32, 38, 47, 56, 61, 73, 80, 86, 98]
+>> - usuario:2 --> cartela:2: [7, 11, 17, 23, 28, 31, 33, 41, 42, 48, 51, 68, 76, 86, 88]
+>> - usuario:3 --> cartela:3: [15, 17, 26, 27, 29, 30, 36, 48, 52, 61, 66, 75, 84, 91, 94]
+>> - usuario:4 --> cartela:4: [2, 18, 34, 35, 42, 51, 58, 66, 69, 70, 71, 76, 78, 95, 96]
+>> - usuario:5 --> cartela:5: [3, 27, 30, 32, 36, 41, 45, 48, 51, 54, 56, 68, 70, 72, 91]
+>> - usuario:6 --> cartela:6: [6, 7, 22, 24, 33, 39, 49, 62, 64, 69, 77, 78, 80, 94, 97]
+>> - usuario:7 --> cartela:7: [15, 23, 30, 31, 40, 47, 58, 63, 64, 74, 75, 79, 83, 91, 99]
+>> - usuario:8 --> cartela:8: [11, 12, 13, 24, 30, 38, 40, 42, 63, 67, 72, 81, 94, 97, 98]
+>> - usuario:9 --> cartela:9: [1, 21, 25, 29, 35, 43, 51, 52, 69, 70, 73, 82, 85, 92, 93]
+>> - usuario:10 --> cartela:10: [6, 9, 10, 16, 19, 23, 27, 37, 41, 58, 68, 73, 75, 92, 93]
+>> - usuario:11 --> cartela:11: [3, 9, 11, 12, 17, 18, 21, 40, 42, 49, 55, 58, 63, 64, 90]
+>> - usuario:12 --> cartela:12: [1, 2, 9, 11, 22, 25, 31, 57, 63, 67, 84, 88, 89, 95, 97]
+>> - usuario:13 --> cartela:13: [3, 20, 23, 27, 29, 30, 38, 42, 56, 62, 67, 74, 78, 90, 96]
+>> - usuario:14 --> cartela:14: [2, 3, 7, 17, 25, 29, 36, 38, 39, 42, 50, 63, 65, 70, 76]
+>> - usuario:15 --> cartela:15: [6, 25, 33, 46, 55, 60, 61, 68, 69, 75, 76, 77, 87, 90, 96]
+>> - usuario:16 --> cartela:16: [8, 11, 16, 17, 19, 30, 41, 66, 68, 73, 75, 77, 90, 91, 99]
+>> - usuario:17 --> cartela:17: [5, 15, 26, 33, 36, 37, 53, 57, 64, 65, 75, 79, 90, 93, 97]
+>> - usuario:18 --> cartela:18: [3, 4, 5, 6, 8, 12, 27, 31, 35, 45, 68, 75, 83, 88, 95]
+>> - usuario:19 --> cartela:19: [3, 5, 13, 16, 22, 25, 29, 44, 45, 57, 67, 68, 78, 97, 99]
+>> - usuario:20 --> cartela:20: [2, 10, 19, 26, 31, 56, 60, 62, 65, 76, 79, 80, 87, 90, 93]
+>> - usuario:21 --> cartela:21: [4, 9, 15, 17, 21, 23, 26, 36, 38, 41, 44, 48, 52, 90, 93]
+>> - usuario:22 --> cartela:22: [14, 20, 21, 28, 37, 40, 44, 53, 55, 56, 70, 79, 92, 95, 99]
+>> - usuario:23 --> cartela:23: [11, 13, 31, 41, 43, 50, 53, 56, 57, 60, 65, 71, 74, 80, 98]
+>> - usuario:24 --> cartela:24: [1, 3, 7, 9, 25, 35, 46, 52, 54, 56, 58, 60, 74, 84, 98]
+>> - usuario:25 --> cartela:25: [9, 10, 12, 13, 29, 32, 51, 53, 57, 62, 69, 72, 77, 86, 94]
+>> - usuario:26 --> cartela:26: [7, 18, 23, 27, 31, 38, 45, 51, 58, 68, 73, 91, 95, 98, 99]
+>> - usuario:27 --> cartela:27: [19, 24, 25, 29, 44, 46, 47, 51, 54, 57, 59, 61, 80, 90, 94]
+>> - usuario:28 --> cartela:28: [8, 18, 21, 22, 23, 31, 39, 47, 54, 55, 56, 68, 92, 95, 98]
+>> - usuario:29 --> cartela:29: [6, 7, 18, 24, 27, 30, 39, 45, 57, 58, 59, 61, 65, 96, 97]
+>> - usuario:30 --> cartela:30: [11, 12, 17, 18, 22, 28, 35, 42, 45, 48, 64, 66, 69, 77, 87]
+>> - usuario:31 --> cartela:31: [6, 9, 12, 13, 17, 19, 38, 47, 49, 52, 53, 57, 58, 59, 85]
+>> - usuario:32 --> cartela:32: [8, 19, 24, 29, 34, 38, 39, 45, 56, 62, 69, 76, 77, 93, 95]
+>> - usuario:33 --> cartela:33: [3, 23, 29, 30, 37, 38, 42, 56, 58, 60, 66, 72, 82, 85, 86]
+>> - usuario:34 --> cartela:34: [6, 7, 25, 32, 39, 41, 45, 55, 57, 64, 70, 72, 73, 82, 86]
+>> - usuario:35 --> cartela:35: [12, 13, 25, 29, 35, 40, 43, 55, 62, 65, 72, 74, 86, 92, 93]
+>> - usuario:36 --> cartela:36: [4, 25, 29, 30, 33, 41, 50, 54, 55, 60, 64, 75, 80, 85, 97]
+>> - usuario:37 --> cartela:37: [4, 7, 8, 9, 16, 20, 30, 43, 52, 62, 63, 67, 72, 89, 97]
+>> - usuario:38 --> cartela:38: [19, 27, 28, 38, 44, 46, 48, 50, 55, 58, 62, 63, 64, 65, 94]
+>> - usuario:39 --> cartela:39: [2, 9, 15, 23, 26, 34, 35, 40, 68, 69, 73, 80, 81, 98, 99]
+>> - usuario:40 --> cartela:40: [4, 8, 10, 29, 49, 55, 59, 61, 66, 68, 75, 78, 85, 89, 99]
+>> - usuario:41 --> cartela:41: [7, 12, 17, 24, 28, 29, 34, 35, 38, 52, 62, 68, 91, 96, 98]
+>> - usuario:42 --> cartela:42: [8, 16, 29, 31, 34, 41, 50, 60, 63, 65, 74, 81, 83, 88, 90]
+>> - usuario:43 --> cartela:43: [6, 19, 20, 33, 44, 45, 52, 57, 61, 69, 82, 89, 90, 93, 98]
+>> - usuario:44 --> cartela:44: [2, 12, 19, 26, 30, 31, 42, 47, 64, 65, 73, 79, 90, 91, 93]
+>> - usuario:45 --> cartela:45: [1, 7, 12, 17, 18, 20, 23, 25, 61, 73, 74, 75, 81, 97, 99]
+>> - usuario:46 --> cartela:46: [9, 12, 22, 27, 33, 40, 44, 52, 56, 62, 64, 76, 77, 83, 99]
+>> - usuario:47 --> cartela:47: [9, 26, 28, 35, 45, 59, 61, 65, 67, 69, 75, 88, 90, 96, 98]
+>> - usuario:48 --> cartela:48: [3, 4, 9, 14, 28, 34, 36, 38, 40, 41, 44, 64, 65, 80, 92]
+>> - usuario:49 --> cartela:49: [17, 18, 22, 24, 25, 35, 62, 63, 65, 80, 81, 91, 92, 94, 97]
+>> - usuario:50 --> cartela:50: [11, 13, 16, 30, 49, 61, 63, 64, 71, 74, 83, 84, 87, 91, 99]
+>> # Jogando uma partida #
+
+>> # Sorteada a pedra "90" #
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "1" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+
+>> # Sorteada a pedra "32" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+
+>> # Sorteada a pedra "27" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+
+>> # Sorteada a pedra "30" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "24" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "60" #
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+
+>> # Sorteada a pedra "58" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+
+>> # Sorteada a pedra "12" #
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+
+>> # Sorteada a pedra "59" #
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "92" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "37" #
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+
+>> # Sorteada a pedra "98" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "74" #
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "79" #
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "26" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "65" #
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "39" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+
+>> # Sorteada a pedra "63" #
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "22" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "28" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "72" #
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+
+>> # Sorteada a pedra "40" #
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "10" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+
+>> # Sorteada a pedra "18" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "81" #
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "64" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "43" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+
+>> # Sorteada a pedra "29" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+
+>> # Sorteada a pedra "62" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "53" #
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+
+>> # Sorteada a pedra "86" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+
+>> # Sorteada a pedra "34" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "14" #
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "68" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+
+>> # Sorteada a pedra "93" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "87" #
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "51" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+
+>> # Sorteada a pedra "23" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+
+>> # Sorteada a pedra "80" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "70" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+
+>> # Sorteada a pedra "38" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "91" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "97" #
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "41" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "85" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+
+>> # Sorteada a pedra "67" #
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "71" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "50" #
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+
+>> # Sorteada a pedra "7" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+
+>> # Sorteada a pedra "3" #
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "46" #
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+
+>> # Sorteada a pedra "19" #
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "54" #
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+
+>> # Sorteada a pedra "42" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "83" #
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "76" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+
+>> # Sorteada a pedra "31" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador João Brasil (usuario:26) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "52" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Afonso Nobre (usuario:41) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+
+>> # Sorteada a pedra "89" #
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+
+>> # Sorteada a pedra "21" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+
+>> # Sorteada a pedra "66" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+
+>> # Sorteada a pedra "4" #
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "75" #
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+
+>> # Sorteada a pedra "2" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Gilberto Felipe (usuario:20) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "78" #
+>> - O jogador Gilberto Silveira (usuario:4) pontuou.
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+
+>> # Sorteada a pedra "61" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Paulo Brasil (usuario:29) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "47" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador André Carvalho (usuario:7) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador André Pereira (usuario:44) pontuou.
+
+>> # Sorteada a pedra "9" #
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador André Nobre (usuario:11) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Eduardo Torres (usuario:39) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+>> - O jogador Eduardo Carvalho (usuario:47) pontuou.
+>> - O jogador Paulo Carvalho (usuario:48) pontuou.
+
+>> # Sorteada a pedra "13" #
+>> - O jogador João Silveira (usuario:8) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Paulo Silveira (usuario:23) pontuou.
+>> - O jogador Paulo Pereira (usuario:25) pontuou.
+>> - O jogador André Nobre (usuario:31) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "48" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Bernardo Silva (usuario:3) pontuou.
+>> - O jogador Bernardo Silva (usuario:5) pontuou.
+>> - O jogador Gilberto Pereira (usuario:21) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:30) pontuou.
+>> - O jogador Afonso Carvalho (usuario:38) pontuou.
+
+>> # Sorteada a pedra "16" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Lucas Silva (usuario:10) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+>> - O jogador André Felipe (usuario:50) pontuou.
+
+>> # Sorteada a pedra "25" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Bernardo Felipe (usuario:12) pontuou.
+>> - O jogador Lucas Silva (usuario:14) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Bernardo Nobre (usuario:19) pontuou.
+>> - O jogador Paulo Torres (usuario:24) pontuou.
+>> - O jogador Paulo Torres (usuario:27) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Pedro Brasil (usuario:35) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+>> - O jogador Gilberto Silveira (usuario:49) pontuou.
+
+>> # Sorteada a pedra "33" #
+>> - O jogador João Silveira (usuario:2) pontuou.
+>> - O jogador Eduardo Nobre (usuario:6) pontuou.
+>> - O jogador Gilberto Carvalho (usuario:15) pontuou.
+>> - O jogador Paulo Pereira (usuario:17) pontuou.
+>> - O jogador Lucas Torres (usuario:36) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador Paulo Silva (usuario:46) pontuou.
+
+>> # Sorteada a pedra "82" #
+>> - O jogador Pedro Torres (usuario:9) pontuou.
+>> - O jogador Gilberto Felipe (usuario:33) pontuou.
+>> - O jogador Lucas Felipe (usuario:34) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+
+>> # Sorteada a pedra "8" #
+>> - O jogador Eduardo Carvalho (usuario:1) pontuou.
+>> - O jogador Paulo Brasil (usuario:16) pontuou.
+>> - O jogador Bernardo Brasil (usuario:18) pontuou.
+>> - O jogador Bernardo Carvalho (usuario:28) pontuou.
+>> - O jogador André Silveira (usuario:32) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Lucas Felipe (usuario:40) pontuou.
+>> - O jogador Pedro Nobre (usuario:42) pontuou.
+
+>> # Sorteada a pedra "20" #
+>> - O jogador Lucas Pereira (usuario:13) pontuou.
+>> - O jogador Eduardo Nobre (usuario:22) pontuou.
+>> - O jogador Eduardo Felipe (usuario:37) pontuou.
+>> - O jogador Eduardo Brasil (usuario:43) pontuou.
+>> - O jogador André Brasil (usuario:45) pontuou.
+
+>> ### REDINSGO! ###
+>> ### O JOGADOR Eduardo Felipe (usuario:37) COMPLETOU A CARTELA! ###
