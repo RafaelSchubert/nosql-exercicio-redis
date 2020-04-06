@@ -1,6 +1,8 @@
 # nosql-exercicio-redis
 Exercício de prática de uso do Redis. Curso de Especialização em Data Science, disciplina de Bancos de Dados Não Relacionais.
 
+A pasta "execucao" contém um exemplo de saída (execucao.txt) e as imagens duma execução.
+
 EXECUTANDO:
 Para executar o exercício, deve-se ter o Python (eu usei a versão 3.7.5) ou alguma distribuição desse instalada.
 
