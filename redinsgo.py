@@ -76,18 +76,17 @@ def carregar_cartelas_bingo():
     print('Carregar as cartelas dos jogadores:')
     print()
 
-    for numero in intervalo_numeros_jogadores():
-        chave_jogador = montar_chave_jogador(numero)
-        chave_cartela = montar_chave_cartela(numero)
+    for jogador in intervalo_numeros_jogadores():
+        chave_jogador = montar_chave_jogador(jogador)
+        chave_cartela = montar_chave_cartela(jogador)
 
-        numeros_cartela = set()
+        while conexao_redis.scard(chave_cartela) < BINGO_CARTELA_NUMEROS_QUANTIDADE:
+            conexao_redis.sadd(chave_cartela, int(conexao_redis.srandmember(CHAVE_BINGO_NUMEROS)))
 
-        while len(numeros_cartela) < BINGO_CARTELA_NUMEROS_QUANTIDADE:
-            numeros_cartela.add(int(conexao_redis.srandmember(CHAVE_BINGO_NUMEROS)))
+        numeros_cartela = {int(numero) for numero in conexao_redis.smembers(chave_cartela)}
 
         print(f'{chave_jogador} --> {chave_cartela}: {sorted(numeros_cartela)}')
 
-        conexao_redis.sadd(chave_cartela, *numeros_cartela)
         conexao_redis.hset(chave_jogador, CHAVE_JOGADOR_CARTELA, chave_cartela)
 
 
